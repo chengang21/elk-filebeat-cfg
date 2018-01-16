@@ -1,0 +1,36 @@
+filebeat.prospectors:
+- type: log
+  enabled: true
+  paths:
+    - /home/admin/logs/*.log
+  tail_files: false
+  encoding: utf-8
+  harvester_buffer_size: 5242880
+  max_bytes: 262140
+  close_older: 10s
+  backoff: 5s
+  close_inactive: 2s
+  close_removed: true
+  close_eof: true
+  clean_removed: true
+  # clean_inactive: 10s 
+  # harvester_limit: 10
+  
+
+output.kafka:
+  enabled: true
+  hosts: ["10.214.162.73:9092","10.214.162.74:9092","10.214.162.75:9092"]
+  topic: cdnlogs
+  worker: 5
+  bulk_max_size: 128
+  broker_timeout: 60s
+  channel_buffer_size: 256
+  keep_alive: 60
+  compression: gzip
+  client_id: fb1
+  required_acks: 1
+
+tags: ["cdn"]
+
+# nohup /home/admin/elk/filebeat/filebeat -c /home/admin/elk/filebeat/filebeat.yml -e > /home/admin/elk/filebeat/fb-logs/fb1.log 2>&1 &
+# debug:  nohup /home/admin/elk/filebeat/filebeat -c /home/admin/elk/filebeat/filebeat.yml -e -d "*" > /home/admin/elk/filebeat/fb-logs/fb1.log 2>&1 & 
